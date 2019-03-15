@@ -4,10 +4,19 @@ class Formatter {
   }
 
   static sanitize(string) {
-    return string.replace(/[^0-9-' ]/g, "")
+    return string.replace(/[^0-9a-z\-,' ]/gi, "")
   }
 
   static titleize(string) {
-    return string.split(" ").map((word) => this.capitalize).join(" ");
+    const exception = ["the", "a", "an", "but", "of", "and", "for", "at", "by", "from"]
+    const words =  string.split(" ");
+    const firstWord = this.capitalize(words.shift());
+    const newSentence = words.map(word => {
+      if (exception.includes(this.sanitize(word))) return word;
+      return this.capitalize(word);
+    })
+    newSentence.unshift(firstWord);
+    
+    return newSentence.join(" ");
   }
 }
